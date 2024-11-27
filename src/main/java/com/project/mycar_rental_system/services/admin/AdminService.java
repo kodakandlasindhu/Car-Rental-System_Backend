@@ -1,5 +1,6 @@
 package com.project.mycar_rental_system.services.admin;
 
+import com.project.mycar_rental_system.dto.BookACarDto;
 import com.project.mycar_rental_system.dto.CarDto;
 
 import java.io.IOException;
@@ -17,5 +18,8 @@ public interface AdminService {
 
     boolean updateCar(Long carId, CarDto carDto) throws IOException;
 
+    List<BookACarDto> getBookings();
+
+    boolean changeBookingStatus(Long bookingId,String status);
 }
 

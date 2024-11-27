@@ -1,5 +1,6 @@
 package com.project.mycar_rental_system.controller;
 
+import com.project.mycar_rental_system.dto.BookACarDto;
 import com.project.mycar_rental_system.dto.CarDto;
 import com.project.mycar_rental_system.services.admin.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -46,7 +48,6 @@ public class AdminController {
     }
 
     @PutMapping("/car/{carId}")
-
     public ResponseEntity<Void>  updateCar(@PathVariable Long carId, @ModelAttribute CarDto carDto) throws IOException{
         try{
             boolean success= adminService.updateCar(carId, carDto);
@@ -56,5 +57,17 @@ public class AdminController {
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @GetMapping("/car/bookings")
+        public ResponseEntity<List<BookACarDto>> getBookings(){
+            return ResponseEntity.ok(adminService.getBookings());
+    }
+
+    @GetMapping("/car/booking/{bookingId}/{status}")
+    public ResponseEntity<?> changeBookingStatus(@PathVariable Long bookingId, @PathVariable String status){
+        boolean success = adminService.changeBookingStatus(bookingId,status);
+        if(success)return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
     }
 }
