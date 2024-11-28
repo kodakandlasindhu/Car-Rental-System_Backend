@@ -2,12 +2,16 @@ package com.project.mycar_rental_system.services.admin;
 
 import com.project.mycar_rental_system.dto.BookACarDto;
 import com.project.mycar_rental_system.dto.CarDto;
+import com.project.mycar_rental_system.dto.CarDtoListDto;
+import com.project.mycar_rental_system.dto.SearchCarDto;
 import com.project.mycar_rental_system.entity.BookACar;
 import com.project.mycar_rental_system.entity.Car;
 import com.project.mycar_rental_system.enums.BookCarStatus;
 import com.project.mycar_rental_system.repository.BookACarRepository;
 import com.project.mycar_rental_system.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -102,5 +106,25 @@ public class AdminServiceImpl implements AdminService{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public CarDtoListDto searchCar(SearchCarDto searchCarDto) {
+        Car car=new Car();
+        car.setBrand(searchCarDto.getBrand());
+        car.setType(searchCarDto.getType());
+        car.setTransmission(searchCarDto.getTransmission());
+        car.setColor(searchCarDto.getColor());
+        ExampleMatcher exampleMatcher =
+                ExampleMatcher.matchingAll()
+                        .withMatcher("brand",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                        .withMatcher("type",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                        .withMatcher("transmission",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                        .withMatcher("color",ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+        Example<Car> carExample= Example.of(car,exampleMatcher);
+        List<Car> carList=carRepository.findAll(carExample);
+        CarDtoListDto carDtoListDto=new CarDtoListDto();
+        carDtoListDto.setCarDtoList(carList.stream().map(Car::getCarDto).collect(Collectors.toList()));
+        return carDtoListDto;
     }
 }

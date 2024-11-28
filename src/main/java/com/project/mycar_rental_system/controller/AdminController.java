@@ -2,6 +2,7 @@ package com.project.mycar_rental_system.controller;
 
 import com.project.mycar_rental_system.dto.BookACarDto;
 import com.project.mycar_rental_system.dto.CarDto;
+import com.project.mycar_rental_system.dto.SearchCarDto;
 import com.project.mycar_rental_system.services.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -69,5 +70,10 @@ public class AdminController {
         boolean success = adminService.changeBookingStatus(bookingId,status);
         if(success)return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/car/search")
+    public ResponseEntity<?> searchCar(@RequestBody SearchCarDto searchCarDto){
+        return ResponseEntity.ok(adminService.searchCar(searchCarDto));
     }
 }
