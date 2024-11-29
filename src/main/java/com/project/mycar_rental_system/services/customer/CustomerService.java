@@ -2,6 +2,8 @@ package com.project.mycar_rental_system.services.customer;
 
 import com.project.mycar_rental_system.dto.BookACarDto;
 import com.project.mycar_rental_system.dto.CarDto;
+import com.project.mycar_rental_system.dto.CarDtoListDto;
+import com.project.mycar_rental_system.dto.SearchCarDto;
 import com.project.mycar_rental_system.entity.BookACar;
 
 import java.util.List;
@@ -16,4 +18,6 @@ public interface CustomerService {
     CarDto getCarById(Long carId);
 
     List<BookACarDto> getBookingsByUserId(Long userId);
+
+    CarDtoListDto searchCar(SearchCarDto searchCarDto);
 }
